@@ -170,12 +170,13 @@ const questions = [{
   
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    fs.writeToFile(fileName, data, error => {
+    fs.writeFile(fileName, data, error => {
         if (error) {
             return console.log('Sorry there has been an error : ' + error);
         }
     })
 }
+
 
 // Function to initialize the application
 async function init() {
