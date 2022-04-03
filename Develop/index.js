@@ -1,75 +1,176 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const generateMarkdown = require('../Develop/utils/generateMarkdown');
+const utils = require('utils');
 
 // TODO: Include packages needed for this application
 
 // TODO: Create an array of questions for user input
 const questions = [{
-        type: 'input',
-        name: 'title',
-        message: 'What is the title of your repository?'
+    type: 'input',
+    name: 'title',
+    message: 'What is the title of your repository? (Required)',
+    validate: nameInput => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log('Please enter your repository title.');
+        return false;
+      }
+    }
+  },
+  {
+    type: 'input',
+    name: 'description',
+    message: 'What is the description of your repository? (Required)',
+    validate: nameInput => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log('Please enter a description of the repository.');
+        return false;
+      }
+    }
     },
-    {
-        type: 'input',
-        name: 'description',
-        message: 'What is the description of your repository?'
+    // Ask the user if there is an installation process
+  {
+    type: 'confirm',
+    name: 'confirmInstallation',
+    message: 'Is there an installation process?'
     },
-    {
-        type: 'input',
-        name: 'installation instructions',
-        message: 'How do others install your application?'
-    },
-    {
-        type: 'input',
-        name: 'usage information',
-        message: 'How may other people use your application?'
-    },
-    {
-        type: 'input',
-        name: 'contribution guidelines',
-        message: 'How may other developers contributed to your repository?'
-    },
-    {
-        type: 'input',
-        name: 'test instructions',
-        message: 'What testing is available and how is the testing performed?'
-    },
-    {
-        type: 'checkbox',
-        name: 'license options',
-        message: 'Please choose a license, if you aren\'t sure, select none. You can always add a license later.',
-        choices: ['none', 'GNU AGPLv3', 'GNU GPLv3',
-            'GNU LGPLv3', 'Mozilla Public License 2.0',
-            'Apache License 2.0', 'MIT License', 'Boost Software License 1.0',
-            'The Unlicense']
-    },
-    {
-        type: 'input',
-        name: 'username',
-        message: 'What is your GitHub username?'
-    },
-    {
-        type: 'input',
-        name: 'email',
-        message: 'What is your email address?'
-    },
-    {
-        type: 'input',
-        name: 'questions',
-        message: 'Any additional instructions for people with questions?'
-  }];
+  {
+    type: 'input',
+    name: 'installation',
+    message: 'Please list installation instructions.',
 
-  // inquirer.prompt(questions)
-  // .then(function (data) {
-  //    writeToFile('./index.txt',data);
-  // });
-
+    // If user says yes they can list the steps
+    when: ({ confirmInstallation }) => {
+      if (confirmInstallation) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+  
+  { //confirm
+    type: 'confirm',
+    name: 'confirmUsage',
+    message: 'Would you like to give instructions for using your application?'
+  },
+  { //if confirmed
+    type: 'input',
+    name: 'instructions',
+    message: 'Please list instructions for using your application. It is recommended to add descriptive images later as well.',
+    when: ({ confirmUsage }) => {
+      if (confirmUsage) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+  
+  {
+    type: 'confirm',
+    name: 'confirmContribution',
+    message: 'May other developers contribute to your repository?'
+  },
+  {
+    type: 'input',
+    name: 'contribution',
+    message: 'Please explain how other developers may contribute to your project.',
+    when: ({ confirmContribution }) => {
+      if (confirmContribution) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+  {
+    type: 'confirm',
+    name: 'testConfirm',
+    message: 'Is testing available?'
+  },
+  {
+    type: 'input',
+    name: 'testing',
+    message: 'Please explain how users may test your application.',
+    when: ({ testConfirm }) => {
+      if (testConfirm) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+  { // Allows user to pick a license if they would like
+    type: 'checkbox',
+    name: 'license',
+    message: 'Please choose a license, if you aren\'t sure, select none. You can always add a license later.',
+    choices: ['none', 'GNU AGPLv3', 'GNU GPLv3',
+      'GNU LGPLv3', 'Mozilla Public License 2.0',
+      'Apache License 2.0', 'MIT License', 'Boost Software License 1.0',
+      'The Unlicense']
+  },
+  {
+    type: 'input',
+    name: 'username',
+    message: 'What is your GitHub username? (Required)',
+    validate: nameInput => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log('Please enter your GitHub username.');
+        return false;
+      }
+    }
+  },
+  {
+    type: 'input',
+    name: 'email',
+    message: 'What is your email address? (Required)',
+    validate: nameInput => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log('Please enter your email.');
+        return false;
+      }
+    }
+  },
+  {
+    type: 'confirm',
+    name: 'questionsConfirm',
+    message: 'May individuals contact you with questions?'
+  },
+  {
+    type: 'input',
+    name: 'questions',
+    message: 'Please list instructions for those who wish to contact you.',
+    when: ({ questionsConfirm }) => {
+      if (questionsConfirm) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }]; 
+  // end of questions
+  
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {}
 
 // TODO: Create a function to initialize app
-function init() {}
+async function init() {
+    try {
+        const userAnswers = await inquirer.prompt(questions);
+        console.log('Thank you! The data is being processed into your README.md: ', userAnswers);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 // Function call to initialize app
 init();
