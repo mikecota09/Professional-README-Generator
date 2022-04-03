@@ -1,9 +1,9 @@
 // Packages needed for this application
 const fs = require('fs');
 const inquirer = require('inquirer');
-const generateMarkdown = require('../Develop/utils/generateMarkdown');
-const utils = require('utils');
-const createReadMe = utils.promisify(writeToFile);
+const generateMarkdown = require('./utils/generateMarkdown');
+const util = require('util');
+const createReadMe = util.promisify(writeToFile);
 
 
 // Array of questions for user to answer
@@ -11,7 +11,7 @@ const questions = [{
     type: 'input',
     name: 'title',
     message: 'What is the title of your repository? (Required)',
-    // validate to make sure there is a value there
+    // make sure there is answer entered
     validate: nameInput => {
       if (nameInput) {
         return true;
@@ -150,23 +150,18 @@ const questions = [{
     }
   },
   {
-    type: 'confirm',
-    name: 'questionsConfirm',
-    message: 'May individuals contact you with questions?'
-  },
-  {
     type: 'input',
     name: 'questions',
-    message: 'Please list instructions for those who wish to contact you.',
-    when: ({ questionsConfirm }) => {
-      if (questionsConfirm) {
-        return true;
-      } else {
-        return false;
-      }
+    message: 'Please list instructions for those who may want to contact you.',
+    validate: (nameInput) => {
+        if (nameInput) {
+            return true;
+        } else {
+            return false;
+        }
     }
   }]; 
-  // end of questions
+// End of questions
   
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
@@ -176,7 +171,6 @@ function writeToFile(fileName, data) {
         }
     })
 }
-
 
 // Function to initialize the application
 async function init() {
