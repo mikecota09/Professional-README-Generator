@@ -1,15 +1,17 @@
+// Packages needed for this application
 const fs = require('fs');
 const inquirer = require('inquirer');
 const generateMarkdown = require('../Develop/utils/generateMarkdown');
 const utils = require('utils');
+const createReadMe = utils.promisify(writeToFile);
 
-// TODO: Include packages needed for this application
 
-// TODO: Create an array of questions for user input
+// Array of questions for user to answer
 const questions = [{
     type: 'input',
     name: 'title',
     message: 'What is the title of your repository? (Required)',
+    // validate to make sure there is a value there
     validate: nameInput => {
       if (nameInput) {
         return true;
@@ -32,7 +34,7 @@ const questions = [{
       }
     }
     },
-    // Ask the user if there is an installation process
+  // confirm whether or not there is a installation process first
   {
     type: 'confirm',
     name: 'confirmInstallation',
@@ -42,8 +44,7 @@ const questions = [{
     type: 'input',
     name: 'installation',
     message: 'Please list installation instructions.',
-
-    // If user says yes they can list the steps
+    // the <when> = if the person selects a installation process allow them to input steps
     when: ({ confirmInstallation }) => {
       if (confirmInstallation) {
         return true;
@@ -53,12 +54,12 @@ const questions = [{
     }
   },
   
-  { //confirm
+  { // confirm
     type: 'confirm',
     name: 'confirmUsage',
     message: 'Would you like to give instructions for using your application?'
   },
-  { //if confirmed
+  { // if confirmed
     type: 'input',
     name: 'instructions',
     message: 'Please list instructions for using your application. It is recommended to add descriptive images later as well.',
@@ -105,14 +106,22 @@ const questions = [{
       }
     }
   },
-  { // Allows user to pick a license if they would like
+  { // box that allows user to choose a license
     type: 'checkbox',
     name: 'license',
-    message: 'Please choose a license, if you aren\'t sure, select none. You can always add a license later.',
-    choices: ['none', 'GNU AGPLv3', 'GNU GPLv3',
+    message: 'Please choose a license.',
+    choices: ['GNU AGPLv3', 'GNU GPLv3',
       'GNU LGPLv3', 'Mozilla Public License 2.0',
       'Apache License 2.0', 'MIT License', 'Boost Software License 1.0',
-      'The Unlicense']
+      'The Unlicense'],
+    validate: nameInput => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log('Please select a license.');
+        return false;
+      }
+    }
   },
   {
     type: 'input',
@@ -160,15 +169,26 @@ const questions = [{
   // end of questions
   
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+function writeToFile(fileName, data) {
+    fs.writeToFile(fileName, data, error => {
+        if (error) {
+            return console.log('Sorry there has been an error : ' + error);
+        }
+    })
+}
 
-// TODO: Create a function to initialize app
+// Function to initialize the application
 async function init() {
     try {
         const userAnswers = await inquirer.prompt(questions);
         console.log('Thank you! The data is being processed into your README.md: ', userAnswers);
+        // retrieve the template from generateMardown.js using the answers as the parameters
+        const myMarkdown = generateMarkdown(userAnswers);
+        console.log(myMarkdown);
+        // create the README file 
+        await createReadMe('README.md', myMarkdown);
     } catch (error) {
-        console.log(error);
+        console.log('Sorry ther has been an error : ' + error);
     }
 };
 
