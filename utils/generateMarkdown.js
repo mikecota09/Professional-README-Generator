@@ -40,11 +40,17 @@ function generateMarkdown(data) {
   let markdownTemplate =
       
   // Title, Badge, and Description
+
   `# ${data.title}
+
   ## Description
+
   ${data.description}
+
   ![badge](https://img.shields.io/badge/license-${licenseOption}-brightorange)
+
   You can access more badges and their purposes at [shields.io](https://shields.io)
+
   `;
 
 // Table of contents section if user chooses to create one  
@@ -91,6 +97,7 @@ function generateMarkdown(data) {
   ## Installation
       
     _Follow these steps to properly install this application:_
+
     ${data.installation}`
     };
   
@@ -100,7 +107,9 @@ function generateMarkdown(data) {
         `
         
   ## Usage
+
     _Instructions for use:_
+
     ${data.instructions}`
     };
   
@@ -110,7 +119,9 @@ function generateMarkdown(data) {
         `
         
   ## Contribution
+
     _If you would like to contribute, please adhere to these guidelines:_
+
     ${data.contribution}`
     };
   
@@ -120,7 +131,9 @@ function generateMarkdown(data) {
         `
         
   ## Testing
+
     _Instructions for testing application:_
+
     ${data.testing}`
     };
   
@@ -131,16 +144,20 @@ function generateMarkdown(data) {
   ## Questions
         
     _For further questions:_
+
     ${data.questions}
     
     _Contact Info:_
+
     GitHub: [${data.username}](https://github.com/${data.username})
+
     Email: [${data.email}](mailto:${data.email})`;
     
     markdownTemplate +=
       `
       
   ## License
+  
         
     _This application has the ${data.license}._
         
