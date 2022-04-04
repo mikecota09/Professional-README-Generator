@@ -1,7 +1,7 @@
 # Professional Readme Generator
 
   ## Project Overview:
-  The purpose of this project is to create an application that users can download to create a high quality README for the users.  
+  The purpose of this project is to create an application that users can download to create a high quality README for their application.  
 
   ## Licensing:
   [![license](https://img.shields.io/badge/license-MIT-blue)](https://shields.io)
@@ -49,6 +49,7 @@
 
   ## Additional Info:
   If you have any further questions, or additional feedback, please feel free to reach out and I will get respond as soon as possible.
+  
   Contact Info:
   - Github: [mikecota09](https://github.com/mikecota09)
   - Email: mikecotahf@gmail.com 
