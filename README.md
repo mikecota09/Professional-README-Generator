@@ -13,7 +13,9 @@
   - [Additional Info](#additional-info)
 
   ## Visual Presentation
-  ![Professional Readme Generator Demo](assets/READMEhowto.webm)
+  Here is a video showing the entire process that can be watched through the Screencastify link below.
+  
+  [Walkthrough video](https://drive.google.com/file/d/1W7Rd2uDpVJzXCauwkuxu0d2Xb7q1MUMg/view)
 
   ## Description:
   The above video is how the downloaded application will work. The application uses the command line in terminal to help the user create README files for their application repositories. README's will help users understand your application and offer many additional insights to the application. A README is very important, without one user's might not be able to understand or use your application.
